@@ -21,22 +21,23 @@ public class TestLinkedHashSet{
         set2.add("Michelle");
         set2.add("Ryan");
         
+        // Print the union set
         Set<String> unionSet = new LinkedHashSet<>(set1);
         unionSet.addAll(set2);
 
-        // Print the union set
         System.out.println("Union Set: " + unionSet);
         
+        //Difference set
         Set<String> differenceSet = new LinkedHashSet<>(set1);
         differenceSet.removeAll(set2);
 
-        //Difference set
         System.out.println("Difference Set: " + differenceSet);
         
+        //Intersection set
         Set<String> intersectSet = new LinkedHashSet<>(set1);
         intersectSet.retainAll(set2);
 
-        //Intersection set
+       
         System.out.println("Intersection Set: " + intersectSet);
         
         //CLone Sets
