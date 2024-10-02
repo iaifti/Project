@@ -1,5 +1,3 @@
-// Tashnim Khan Ishika
-
 import java.util.Scanner;
 
 public class StrHashFunc {
