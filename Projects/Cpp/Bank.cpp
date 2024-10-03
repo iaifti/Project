@@ -1,5 +1,7 @@
 #include<iostream>
 #include<string>
+#include<fstream>
+#include<iomanip>
 
 using namespace std;
 
@@ -21,7 +23,7 @@ public:
     void display(){
         cout  <<  "Account Name :  " <<  name << endl;
         cout  <<  "Account No :  " <<  accountNumber << endl;
-        cout  <<  "Account Balance :  " <<  balance << endl;
+        cout << fixed << setprecision(2) << "Account Balance :  $" << balance << endl;
     
     }
 
@@ -55,35 +57,30 @@ int main(){
     double initialBalance;
     double amount; 
     int choice;
+    
+    ifstream inputFile("bank.txt");
+    if(!inputFile){
+        cerr << "Error loading file." << endl;
+        return 1;
+    }
 
-    do
-    {
-        cout <<  "Enter username: " << endl;
-        cin >> userInput;
-        cout <<  "Enter pin: " << endl;
-        cin >> userPin;
+    inputFile >>  userInput >> userPin >>  accountNumber;
+    inputFile.ignore();
+    getline(inputFile, accountName);
+    inputFile >> initialBalance;
+
+    inputFile.close();
 
         if (userInput ==  user && userPin == pass)
         {
             cout <<  "Access Granted!!" << endl;
-            break;
         }
         else{
             cout << "Try Again! " << endl;
+            return 1;
         }
         
-    } while (true);
 
-    cout << "Please enter account Number : " << endl;
-    cin >>  accountNumber;
-
-    cin.ignore();
-
-    cout <<  "Please enter your name :  "<< endl;
-    getline(cin, accountName);
-
-    cout << "Please enter the initial Balance: " << endl;
-    cin >> initialBalance;
 
     againBank userAccount(accountNumber, accountName, initialBalance);
 
@@ -115,5 +112,5 @@ int main(){
     }
     }while (choice != 3);
 
-    return;
+    return 0;
 }
