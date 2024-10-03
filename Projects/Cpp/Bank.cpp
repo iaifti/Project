@@ -3,28 +3,35 @@
 
 using namespace std;
 
-class Account {
+class againBank
+{
 private:
- 
-    int accNum;
+    int accountNumber;
     string name;
     double balance;
 
-
 public:
-    Account(int accNo, string accName, double accBalance){
-        accNum =  accNo;
-        name =  accName;
-        balance =  accBalance;
+  againBank(int accNum, string accName, double accbalance){
 
+        accountNumber = accNum;
+        name = accName;
+        balance = accbalance;
+    }
+
+    void display(){
+        cout  <<  "Account Name :  " <<  name << endl;
+        cout  <<  "Account No :  " <<  accountNumber << endl;
+        cout  <<  "Account Balance :  " <<  balance << endl;
+    
     }
 
     void deposit(double amount){
         balance += amount;
-        cout << "Deposited $" << amount << "only\n";
+        cout <<  "You deposited $" << amount << endl;
+        cout << "Current balance $" <<  balance << endl;
     }
 
-    void withdraw(double amount){
+     void withdraw(double amount){
         if(amount > balance){
             cout << "Insufficient Balance!\n";
         }
@@ -34,18 +41,38 @@ public:
         cout << "Balance is $" << balance << "\n";
         }
     }
-
-    void display(){
-        cout <<  "Account Number: " << accNum << "\n";
-        cout <<  "Name: " << name << "\n";
-        cout <<  "Balance " << balance << "\n";
-    }
 };
 
 int main(){
+
+    const string user = "jason";
+    const int pass =  1234;
+    string userInput;
+    int userPin;
+
     int accountNumber;
     string accountName;
     double initialBalance;
+    double amount; 
+    int choice;
+
+    do
+    {
+        cout <<  "Enter username: " << endl;
+        cin >> userInput;
+        cout <<  "Enter pin: " << endl;
+        cin >> userPin;
+
+        if (userInput ==  user && userPin == pass)
+        {
+            cout <<  "Access Granted!!" << endl;
+            break;
+        }
+        else{
+            cout << "Try Again! " << endl;
+        }
+        
+    } while (true);
 
     cout << "Please enter account Number : " << endl;
     cin >>  accountNumber;
@@ -58,10 +85,33 @@ int main(){
     cout << "Please enter the initial Balance: " << endl;
     cin >> initialBalance;
 
-    Account userAccount (accountNumber, accountName, initialBalance);
+    againBank userAccount(accountNumber, accountName, initialBalance);
 
     userAccount.display();
 
-    return 0;
+    do{
+        
+    cout << "Would Like to\n Withdraw(1) \n Deposit(2)\n Exit(3)" << endl << endl;
+    cin >> choice;
 
+    if(choice ==  1){
+
+        cout << "Enter your withdraw amount: " << endl << endl;
+        cin >> amount;
+        userAccount.withdraw(amount);
+
+    }
+    if(choice ==  2){
+
+        cout << "Enter your deposit amount: " << endl << endl;
+        cin >> amount;
+        userAccount.deposit(amount);
+
+    }
+    if(choice ==  3){
+
+        cout << "Thank you for using the Bank!" << endl <<  endl;
+
+    }
+    }while (choice != 3);
 }
