@@ -1,116 +1,162 @@
-#include<iostream>
-#include<string>
-#include<fstream>
-#include<iomanip>
+/* A simple banking program
+*  Md Istiaq Ahmed
+*  MidTerm Project
+*/
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <iomanip>
 
 using namespace std;
 
-class againBank
-{
+// Class responsible for user authentication
+class BankSystem {
+private:
+    const string correctUser = "jason";   // Hardcoded valid username
+    const int correctPin = 1234;          // Hardcoded valid pin
+
+public:
+    // Method to authenticate the user
+    bool authenticate(string username, int pin) {
+        if (username == correctUser && pin == correctPin) {
+            cout << "Access Granted!" << endl;
+            return true;
+        } else {
+            cout << "Invalid credentials. Try Again!" << endl;
+            return false;
+        }
+    }
+};
+
+// Class representing the bank account
+class BankAccount {
 private:
     int accountNumber;
     string name;
     double balance;
 
 public:
-  againBank(int accNum, string accName, double accbalance){
-
+    // Constructor to initialize the account
+    BankAccount(int accNum, string accName, double accBalance) {
         accountNumber = accNum;
         name = accName;
-        balance = accbalance;
+        balance = accBalance;
     }
 
-    void display(){
-        cout  <<  "Account Name :  " <<  name << endl;
-        cout  <<  "Account No :  " <<  accountNumber << endl;
-        cout << fixed << setprecision(2) << "Account Balance :  $" << balance << endl;
-    
+    // Method to display the account details
+    void display() {
+        cout << "Account Name: " << name << endl;
+        cout << "Account No: " << accountNumber << endl;
+        cout << fixed << setprecision(2) << "Account Balance: $" << balance << endl;
     }
 
-    void deposit(double amount){
+    // Method to deposit an amount into the account
+    void deposit(double amount) {
         balance += amount;
-        cout <<  "You deposited $" << amount << endl;
-        cout << "Current balance $" <<  balance << endl;
+        cout << "You deposited $" << amount << endl;
+        cout << "Current balance: $" << balance << endl;
     }
 
-     void withdraw(double amount){
-        if(amount > balance){
-            cout << "Insufficient Balance!\n";
-        }
-        else{
-        balance -= amount;
-        cout <<  "Withdrawn $" << amount << "only\n";
-        cout << "Balance is $" << balance << "\n";
+    // Method to withdraw an amount from the account
+    void withdraw(double amount) {
+        if (amount > balance) {
+            cout << "Insufficient Balance!" << endl;
+        } else {
+            balance -= amount;
+            cout << "Withdrawn $" << amount << " only." << endl;
+            cout << "Current Balance: $" << balance << endl;
         }
     }
 };
 
-int main(){
+// Main function: Entry point of the program
+int main() {
+    BankSystem bankSystem;                // Create an object for the bank system
+    string username;
+    int pin;
 
-    const string user = "jason";
-    const int pass =  1234;
-    string userInput;
-    int userPin;
+    // Request username and pin from the user
+    cout << "Enter username: ";
+    cin >> username;
+    cout << "Enter pin: ";
+    cin >> pin;
 
+    // Authenticate the user
+    if (!bankSystem.authenticate(username, pin)) {
+        return 1; // Exit if authentication fails
+    }
+
+    // Variables for account information
     int accountNumber;
     string accountName;
     double initialBalance;
-    double amount; 
+    double amount;
     int choice;
-    
+
+    // Open and read data from the bank account file
     ifstream inputFile("bank.txt");
-    if(!inputFile){
+    if (!inputFile) {
         cerr << "Error loading file." << endl;
         return 1;
     }
 
-    inputFile >>  userInput >> userPin >>  accountNumber;
+    // Read the account information from the file
+    inputFile >> accountNumber;
     inputFile.ignore();
     getline(inputFile, accountName);
     inputFile >> initialBalance;
-
     inputFile.close();
 
-        if (userInput ==  user && userPin == pass)
-        {
-            cout <<  "Access Granted!!" << endl;
-        }
-        else{
-            cout << "Try Again! " << endl;
-            return 1;
-        }
-        
+    // Create the BankAccount object with the data from the file
+    BankAccount userAccount(accountNumber, accountName, initialBalance);
 
-
-    againBank userAccount(accountNumber, accountName, initialBalance);
-
+    // Display the initial account details
     userAccount.display();
 
-    do{
-        
-    cout << "Would Like to\n Withdraw(1) \n Deposit(2)\n Exit(3)" << endl << endl;
-    cin >> choice;
+    // Menu-driven loop for user actions (withdraw, deposit, exit)
+    do {
+        cout << "\nWhat would you like to do?\n";
+        cout << "1. Withdraw\n2. Deposit\n3. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-    if(choice ==  1){
+        // Validate if the choice is within range
+        if (choice < 1 || choice > 3) {
+            cout << "Invalid choice. Please enter 1, 2, or 3.\n";
+            continue;
+        }
 
-        cout << "Enter your withdraw amount: " << endl << endl;
-        cin >> amount;
-        userAccount.withdraw(amount);
+        // Process user choices
+        if (choice == 1) {
+            // Handle withdrawal
+            cout << "Enter the amount to withdraw: ";
+            cin >> amount;
 
-    }
-    if(choice ==  2){
+            // Validate if the amount is positive
+            if (amount > 0) {
+                userAccount.withdraw(amount);
+            } else {
+                cout << "Invalid amount. Must be greater than 0.\n";
+            }
 
-        cout << "Enter your deposit amount: " << endl << endl;
-        cin >> amount;
-        userAccount.deposit(amount);
+        } else if (choice == 2) {
+            // Handle deposit
+            cout << "Enter the amount to deposit: ";
+            cin >> amount;
 
-    }
-    if(choice ==  3){
+            // Validate if the amount is positive
+            if (amount > 0) {
+                userAccount.deposit(amount);
+            } else {
+                cout << "Invalid amount. Must be greater than 0.\n";
+            }
+        }
 
-        cout << "Thank you for using the Bank!" << endl <<  endl;
+    } while (choice != 3);  // Exit the loop if the user chooses 3
 
-    }
-    }while (choice != 3);
+    // Display exit message
+    cout << "Thank you for using the bank!" << endl;
 
     return 0;
 }
